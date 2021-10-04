@@ -57,7 +57,7 @@ $url  = $file_url;
 $response = `/usr/bin/php -f $php_receiver $host $parts_path $appKey $appSecret $file $url`;
 
 /*
-* util::DebugUtil::dump($response, filter_type, filter_score)
+* util::DebugUtil::dump($response, $filter_type, $filter_score)
 * - filter_type:    指定したtypeのラベルだけをフィルターして残す (undef: フィルターなし)
 * - filter_score:   指定したscore以上のスコアだけをフィルターして残す (0.0: フィルターなし)
 */
