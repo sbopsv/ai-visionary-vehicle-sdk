@@ -13,8 +13,8 @@
  +-[php]
     +- PerlReceiver.php
  +-[util]
- +- ApiClientDemo.pl	(メイン実行ファイル)
- +- config.ini
+ +- ApiClientDemo.pl    (メイン実行ファイル)
+ +- config.ini          (設定ファイル)
  +- test_image.jpg
 ```
 
