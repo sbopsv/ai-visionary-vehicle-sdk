@@ -12,7 +12,7 @@
 [Project Root]
  +-[com]
     +- [aliyun]			(署名ロジック：参照リポジトリーメイン ※ライセンス注意※)
-	+- [sbc]			(API実行ツール群：本プロジェクト主体で追加)
+    +- [sbc]			(API実行ツール群：本プロジェクト主体で追加)
  +- ApiClientDemo.py	(メイン実行ファイル)
  +- config.ini          (設定ファイル)
  +- test_image.jpg
@@ -34,13 +34,14 @@ imgFile = test_image.jpg
 ## 3. API 実行
 
 以下をターミナルで実行することで、API処理結果を確認する事ができます。
-``` python
+
+```python
 $ python3 ApiClientDemo.php
 ```
 
 本プロジェクトでは利便性を図るために、APIが返してきた結果をフィルターする機能を追加してます。ご活用下さい。
 
-``` python
+```python
 /** ApiExecutor **/
 
 # execute with file_name
@@ -65,7 +66,7 @@ class ApiExecutor():
         bboxIterator = converter.get_bbox_iterator(None, 0.0)		// フィルターなし結果を出力
         for bbox_ in bboxIterator :
             DebugUtil.debug('BOX', bbox_.get_info())
-		
+	
         DebugUtil.debug('----------------------------------', None)
         bboxIterator = converter.get_bbox_iterator(type, score)		// フィルター後の結果を出力
         for bbox_ in bboxIterator :
