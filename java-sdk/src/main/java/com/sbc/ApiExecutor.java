@@ -8,8 +8,9 @@ import com.alibaba.cloudapi.sdk.model.ApiCallback;
 import com.alibaba.cloudapi.sdk.model.ApiRequest;
 import com.alibaba.cloudapi.sdk.model.ApiResponse;
 import com.aliyun.HttpsApiClientDAMO_Vehicle_prod;
-
+import com.google.gson.Gson;
 import com.properties.ConfigProperties;
+import com.sbc.model.Damage;
 
 
 public class ApiExecutor {
@@ -33,12 +34,28 @@ public class ApiExecutor {
             @Override
             public void onResponse(ApiRequest request, ApiResponse response) {
                 try {
-                    System.out.println(response.getCode());
+                    // System.out.println(getResultString(response));
+                    String body = new String(response.getBody());
+                    Damage result = new Gson().fromJson(body, Damage.class);
+                    System.out.println(result.ret);
                 }
                 catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
         });
+    }
+
+    public static Damage SBCDamageRfcn_prodHttpsSync(String json){
+        Damage result = null;
+        ApiResponse response = HttpsApiClientDAMO_Vehicle_prod.getInstance().SBCDamageRfcn_prodSyncMode(json.getBytes(SdkConstant.CLOUDAPI_ENCODING));
+        try {
+            String body = new String(response.getBody());
+            result = new Gson().fromJson(body, Damage.class);
+            result.full(response.getCode());
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return result;
     }
 }

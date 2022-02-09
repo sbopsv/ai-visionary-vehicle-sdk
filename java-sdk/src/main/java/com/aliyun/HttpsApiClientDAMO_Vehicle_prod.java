@@ -34,34 +34,26 @@ public class HttpsApiClientDAMO_Vehicle_prod extends ApacheHttpClient{
     public void SBCDamageRfcn_prod(byte[] body , ApiCallback callback) {
         String path = cfg.getProperty("Damage");
         ApiRequest request = new ApiRequest(HttpMethod.POST_BODY , path, body);
-        
-
 
         sendAsyncRequest(request , callback);
     }
 
     public ApiResponse SBCDamageRfcn_prodSyncMode(byte[] body) {
-        String path = "Damage";
+        String path = cfg.getProperty("Damage");
         ApiRequest request = new ApiRequest(HttpMethod.POST_BODY , path, body);
-        
-
 
         return sendSyncRequest(request);
     }
     public void SBCPartDetection_prod(byte[] body , ApiCallback callback) {
-        String path = "Parts";
+        String path = cfg.getProperty("Parts");
         ApiRequest request = new ApiRequest(HttpMethod.POST_BODY , path, body);
-        
-
-
+    
         sendAsyncRequest(request , callback);
     }
 
     public ApiResponse SBCPartDetection_prodSyncMode(byte[] body) {
-        String path = "Parts";
+        String path = cfg.getProperty("Parts");
         ApiRequest request = new ApiRequest(HttpMethod.POST_BODY , path, body);
-        
-
 
         return sendSyncRequest(request);
     }
