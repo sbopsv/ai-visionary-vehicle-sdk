@@ -9,9 +9,11 @@ import com.alibaba.cloudapi.sdk.enums.Scheme;
 import com.alibaba.cloudapi.sdk.model.HttpClientBuilderParams;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.properties.ConfigProperties;
+
 
 public class HttpApiClientDAMO_Vehicle_prod extends ApacheHttpClient{
-    public final static String HOST = "host";
+    public final static String HOST = ConfigProperties.GetConfig().getProperty("Host");
     static HttpApiClientDAMO_Vehicle_prod instance = new HttpApiClientDAMO_Vehicle_prod();
     public static HttpApiClientDAMO_Vehicle_prod getInstance(){return instance;}
     public static final ObjectMapper mapper = new ObjectMapper();

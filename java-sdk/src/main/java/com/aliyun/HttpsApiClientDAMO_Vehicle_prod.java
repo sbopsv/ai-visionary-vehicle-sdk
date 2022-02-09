@@ -5,6 +5,8 @@
 
 package com.aliyun;
 
+import java.util.Properties;
+
 import com.alibaba.cloudapi.sdk.client.ApacheHttpClient;
 import com.alibaba.cloudapi.sdk.enums.HttpMethod;
 import com.alibaba.cloudapi.sdk.enums.Scheme;
@@ -13,8 +15,11 @@ import com.alibaba.cloudapi.sdk.model.ApiRequest;
 import com.alibaba.cloudapi.sdk.model.ApiResponse;
 import com.alibaba.cloudapi.sdk.model.HttpClientBuilderParams;
 
+import com.properties.ConfigProperties;
+
 public class HttpsApiClientDAMO_Vehicle_prod extends ApacheHttpClient{
-    public final static String HOST = "host";
+    static Properties cfg = ConfigProperties.GetConfig();
+    public final static String HOST = cfg.getProperty("Host");
     static HttpsApiClientDAMO_Vehicle_prod instance = new HttpsApiClientDAMO_Vehicle_prod();
     public static HttpsApiClientDAMO_Vehicle_prod getInstance(){return instance;}
 
@@ -27,7 +32,7 @@ public class HttpsApiClientDAMO_Vehicle_prod extends ApacheHttpClient{
 
 
     public void SBCDamageRfcn_prod(byte[] body , ApiCallback callback) {
-        String path = "path";
+        String path = cfg.getProperty("Damage");
         ApiRequest request = new ApiRequest(HttpMethod.POST_BODY , path, body);
         
 
@@ -36,7 +41,7 @@ public class HttpsApiClientDAMO_Vehicle_prod extends ApacheHttpClient{
     }
 
     public ApiResponse SBCDamageRfcn_prodSyncMode(byte[] body) {
-        String path = "path";
+        String path = "Damage";
         ApiRequest request = new ApiRequest(HttpMethod.POST_BODY , path, body);
         
 
@@ -44,7 +49,7 @@ public class HttpsApiClientDAMO_Vehicle_prod extends ApacheHttpClient{
         return sendSyncRequest(request);
     }
     public void SBCPartDetection_prod(byte[] body , ApiCallback callback) {
-        String path = "path";
+        String path = "Parts";
         ApiRequest request = new ApiRequest(HttpMethod.POST_BODY , path, body);
         
 
@@ -53,7 +58,7 @@ public class HttpsApiClientDAMO_Vehicle_prod extends ApacheHttpClient{
     }
 
     public ApiResponse SBCPartDetection_prodSyncMode(byte[] body) {
-        String path = "path";
+        String path = "Parts";
         ApiRequest request = new ApiRequest(HttpMethod.POST_BODY , path, body);
         
 

@@ -1,5 +1,7 @@
 package com.sbc;
 
+import java.util.Properties;
+
 import com.alibaba.cloudapi.sdk.constant.SdkConstant;
 import com.alibaba.cloudapi.sdk.model.HttpClientBuilderParams;
 import com.alibaba.cloudapi.sdk.model.ApiCallback;
@@ -7,13 +9,16 @@ import com.alibaba.cloudapi.sdk.model.ApiRequest;
 import com.alibaba.cloudapi.sdk.model.ApiResponse;
 import com.aliyun.HttpsApiClientDAMO_Vehicle_prod;
 
+import com.properties.ConfigProperties;
+
 
 public class ApiExecutor {
 
     static {
         HttpClientBuilderParams httpsParam = new HttpClientBuilderParams();
-        httpsParam.setAppKey("key");
-        httpsParam.setAppSecret("secret");
+        Properties cfg = ConfigProperties.GetConfig();
+        httpsParam.setAppKey(cfg.getProperty("AppKey"));
+        httpsParam.setAppSecret(cfg.getProperty("AppSecret"));
         
         HttpsApiClientDAMO_Vehicle_prod.getInstance().init(httpsParam);
     }
