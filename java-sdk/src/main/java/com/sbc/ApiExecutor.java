@@ -11,6 +11,7 @@ import com.aliyun.HttpsApiClientDAMO_Vehicle_prod;
 import com.google.gson.Gson;
 import com.properties.ConfigProperties;
 import com.sbc.model.Damage;
+import com.sbc.model.Parts;
 
 
 public class ApiExecutor {
@@ -56,6 +57,21 @@ public class ApiExecutor {
         }catch (Exception ex){
             ex.printStackTrace();
         }
+        return result;
+    }
+
+
+    public static Parts SBCPartDetection_prodHttpsSync(String json){
+        Parts result = null;
+        ApiResponse response = HttpsApiClientDAMO_Vehicle_prod.getInstance().SBCPartDetection_prodSyncMode(json.getBytes(SdkConstant.CLOUDAPI_ENCODING));
+        try {
+            String body = new String(response.getBody());
+            result = new Gson().fromJson(body, Parts.class);
+            result.full(response.getCode());
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+
         return result;
     }
 }
