@@ -53,8 +53,8 @@ public class ApiExecutor {
         try {
             String body = new String(response.getBody());
             result = new Gson().fromJson(body, Damage.class);
-            result.full(response.getCode());
-        }catch (Exception ex){
+            result.full(response.getCode(), response.getMessage(), response.getHeaders());
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return result;
@@ -67,7 +67,7 @@ public class ApiExecutor {
         try {
             String body = new String(response.getBody());
             result = new Gson().fromJson(body, Parts.class);
-            result.full(response.getCode());
+            result.full(response.getCode(), response.getMessage(), response.getHeaders());
         }catch (Exception ex){
             ex.printStackTrace();
         }

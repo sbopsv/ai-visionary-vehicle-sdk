@@ -3,13 +3,17 @@ package com.sbc.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class Damage {
     public String message;
     public String version;
     public Result results;
     public String ret;
+    public Headers headers;
     private Integer statusCode;
+    private String Message;
+
 
     public class Result{
         public String image_id;
@@ -39,14 +43,23 @@ public class Damage {
             return new ArrayList<String>(Arrays.asList(this.scores.split(",")));
         }
     }
+
     
     private void setCode(Integer code){
         this.statusCode = code;
     }
 
-    public void full(Integer code){
+    private void setMessage(String m) {
+        this.Message = m;
+    }
+    
+
+    public void full(Integer code, String m, Map<String, List<String>> H) {
         this.setCode(code);
+        this.setMessage(m);
+        this.headers = new Headers(H);
     }
 
     public Integer getCode(){return this.statusCode;}
+    public String getMessage(){return this.Message;}
 }
