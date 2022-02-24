@@ -59,7 +59,7 @@ $ php ApiClientDemo.php
 $response= ApiExecutor::doPostStream($host, $parts_path, $appKey, $appSecret, $file_name, NULL);
 
 /*
-* ApiExecutor::dumpResponse($response, filter_type, filter_score)
+* ApiExecutor::dumpResponse($response, $filter_type, $filter_score)
 * - filter_type:    指定したtypeのラベルだけをフィルターして残す (NULL: フィルターなし)
 * - filter_score:   指定したscore以上のスコアだけをフィルターして残す (0.0: フィルターなし)
 */
@@ -100,4 +100,4 @@ class APIExecutor {
 現時点(2021年10月)での動作検証は行いましたが、コードに関するメンテナンス状況(更新・改修・問題)は下記リポジトリーをご参照下さい。
 また「署名ロジック」に関するコードのライセンスは下記リポジトリーのものをそのまま継承してます。
 
-https://github.com/aliyun/api-gateway-demo-sign-ph
+https://github.com/aliyun/api-gateway-demo-sign-php
