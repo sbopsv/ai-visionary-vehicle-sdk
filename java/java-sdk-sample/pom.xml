@@ -54,6 +54,29 @@
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.0.2</version>
+          <executions>
+            <execution>
+                <id>copy-resources</id>
+                <!-- which phase of the maven lifecycle to bind to -->
+                <phase>validate</phase>
+                <goals>
+                    <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <!-- ${project.build.outputDirectory} is the build process output directory (default: target/classes) -->
+                    <outputDirectory>${project.build.outputDirectory}/settings</outputDirectory>
+                    <resources>
+                        <resource>
+                            <!-- location of the resource file to be copied -->
+                            <directory>src/main/config</directory>
+                            <!-- Turn on variable replacement and replace the relevant variables in pom.xml with the properties file, which is not used in this project -->
+                            <filtering>true</filtering>
+                        </resource>
+                    </resources>
+                </configuration>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
