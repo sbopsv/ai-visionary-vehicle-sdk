@@ -1,7 +1,9 @@
-package com.sbc;
+package com.sb.cloudapi.sample;
 
-import com.sbc.model.Damage;
-import com.sbc.model.Parts;
+import com.sb.cloudapi.client.ApiExecutor;
+import com.sb.cloudapi.client.model.Damage;
+import com.sb.cloudapi.client.model.Parts;
+import com.sb.cloudapi.client.util.ReadImageUtil;
 
 public class Sample {
     public static void main(String[] args) {
