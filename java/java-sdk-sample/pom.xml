@@ -65,7 +65,7 @@
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <!-- ${project.build.outputDirectory} is the build process output directory (default: target/classes) -->
-                    <outputDirectory>${project.build.outputDirectory}/settings</outputDirectory>
+                    <outputDirectory>${project.build.directory}/works</outputDirectory>
                     <resources>
                         <resource>
                             <!-- location of the resource file to be copied -->
