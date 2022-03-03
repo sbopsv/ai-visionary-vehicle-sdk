@@ -1,4 +1,4 @@
-package com.sbc.model;
+package com.sb.cloudapi.client.model;
 
 import java.util.List;
 import java.util.Map;
@@ -55,6 +55,9 @@ public class Parts {
     public Integer getCode() {
         return this.statusCode;
     }
-    public String getMessage(){return this.Message;}
+
+    public String getMessage() {
+        return this.Message;
+    }
 
 }

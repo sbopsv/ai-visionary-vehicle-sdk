@@ -1,4 +1,4 @@
-package com.sbc.model;
+package com.sb.cloudapi.client.model;
 
 import java.util.List;
 import java.util.Map;
@@ -23,5 +23,4 @@ public class Headers {
     public Headers(Map<String, List<String>> H) {
         this.setHeaders(H);
     }
-
 }

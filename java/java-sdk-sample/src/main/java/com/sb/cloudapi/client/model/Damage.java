@@ -1,4 +1,4 @@
-package com.sbc.model;
+package com.sb.cloudapi.client.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ public class Damage {
     private String Message;
 
 
-    public class Result{
+    public class Result {
         public String image_id;
         public String modelName;
         public List<Bbox> bbox;
@@ -27,25 +27,25 @@ public class Damage {
         private List<Integer> location;
         private String scores;
         
-        public Float getScore(){
+        public Float getScore() {
             return this.score;
         }
 
-        public String getType(){
+        public String getType() {
             return this.type;
         }
 
-        public List<Integer> getLocation(){
+        public List<Integer> getLocation() {
             return this.location;
         }
 
-        public List<String> getScores(){
+        public List<String> getScores() {
             return new ArrayList<String>(Arrays.asList(this.scores.split(",")));
         }
     }
 
     
-    private void setCode(Integer code){
+    private void setCode(Integer code) {
         this.statusCode = code;
     }
 
@@ -60,6 +60,6 @@ public class Damage {
         this.headers = new Headers(H);
     }
 
-    public Integer getCode(){return this.statusCode;}
-    public String getMessage(){return this.Message;}
+    public Integer getCode() {return this.statusCode;}
+    public String getMessage() {return this.Message;}
 }

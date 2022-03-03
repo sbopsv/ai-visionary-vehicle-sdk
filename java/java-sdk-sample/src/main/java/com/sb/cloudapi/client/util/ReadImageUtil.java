@@ -1,4 +1,4 @@
-package com.sbc;
+package com.sb.cloudapi.client.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,12 +10,12 @@ public class ReadImageUtil {
     public String filename;
     public String url;
 
-    ReadImageUtil(){
+    public ReadImageUtil() {
         filename = null;
         url = null;
     }
 
-    public void SetFilename(String filename){
+    public void SetFilename(String filename) {
         this.filename = filename;
     }
 
@@ -24,31 +24,28 @@ public class ReadImageUtil {
     }
 
     public String Read () {
-        if(this.filename != null && this.url == null){
+        if (this.filename != null && this.url == null) {
             return readImageBase64(this.filename);
-        }
-        else if(this.filename == null && this.url != null){
+        } else if (this.filename == null && this.url != null) {
             return readImageUrl(this.url);
-        }
-        else{
-
+        } else {
             return "error";
         }
     }
 
-    private String readImageBase64(String filename){
+    private String readImageBase64(String filename) {
         byte[] fileStream = null;
-        try{
+        try {
             File file = new File(filename);
             fileStream = Files.readAllBytes(file.toPath());
-        }catch(IOException e) {
+        } catch(IOException e) {
             e.printStackTrace();
         }
 
         return "{\"image\":\"" + Base64.encodeBase64String(fileStream) + "\"}";
     }
 
-    private String readImageUrl(String url){
+    private String readImageUrl(String url) {
         return "{\"url\":\"" + url + "\"}";
     }
 
