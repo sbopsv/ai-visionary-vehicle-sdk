@@ -21,7 +21,7 @@ API Gateway Java SDK は github 上にも公開しています。参照：[Githu
 	* doc/{{regionId}}
 		* ApiDocument{{groupName}}.{{locale}}.md	`グループに所属している API のドキュメント`
 	* lib
-		* sdk-core-java-1.1.7.jar `coreパッケージ、このSDKの依存パッケージ`
+		* sdk-core-java-1.1.7.jar `core パッケージ、この SDK の依存パッケージ`
 		* sdk-core-java-1.1.7-javadoc.jar		`上記のパッケージのドキュメント`
         * sdk-core-java-1.1.7-sources.jar		`上記のパッケージのソースコード`
 	* Readme.{{locale}}.md	`SDK ユーザガイド`
@@ -81,8 +81,9 @@ SDK は Alibaba Cloud API Gateway で定義したパラメータに基づいて�
 
 ````java
 //　Example of asynchronous call
+// 非同期呼び出しの例
 public void test06HttpCommon() throws Exception {
-	HttpsClientUnitTest.getInstance().getUser(userId , new ApiCallback() {
+	HttpsClientUnitTest.getInstance().getUser(userId, new ApiCallback() {
 		@Override
 		public void onFailure(ApiRequest request, Exception e) {
 			e.printStackTrace();
@@ -101,7 +102,8 @@ public void test06HttpCommon() throws Exception {
 	});
 }
 
-//　Example of synchronous call
+// Example of synchronous call
+// 同期呼び出しの例
 public void test06HttpGetUser(int userId) throws Exception {
 	ApiResponse response = HttpsClientUnitTest.getInstance().getUserSyncMode(userId);
 	System.out.println(response.getCode());
@@ -118,7 +120,7 @@ public void test06HttpGetUser(int userId) throws Exception {
 # 3. 高度な使用シーン
 `sdk-core-java-1.1.7` は ApacheHttpClient_4.5.2 を基礎 HTTP クライアントとして用いて、いろんな設定を含めています。`ApiClientBuilder` はメジャーなシーンしかカバーしていませんが、柔軟で便利なインタフェースを提供しています。それらのインタフェースを使って OkHttp3 などの基礎 HTTP クライアントを利用することもできます。
 
-## 3.1 もっと詳細な ApacheHttpClient の設定
+## 3.1. もっと詳細な ApacheHttpClient の設定
 
 こちらの [ApacheHttpClientドキュメント](https://hc.apache.org/httpcomponents-client-4.5.x/current/tutorial/html/index.html) の方法に基づいて自分で作成できます。自分で作成した [HttpClientBuilder](https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/impl/client/HttpClientBuilder.html) を、2.3章の `ApiClientBuilder` に `builder.setExtraParam("apache.httpclient.builder", ${apacheBuilder})` をコールします。そうすることで `HttpClientBuilder` の全てのパラメータを `ApiClientBuilder` に導入できます。
 
@@ -143,7 +145,7 @@ SyncApiClient{{group}} syncClient = SyncApiClient{{group}}.newBuilder()
 - もし `HttpClientBuilder` と `ApiClientBuilder` の同じパラメータに違う値を設定したら、順番に関係なく、`ApiClientBuilder` が優先されます。
 - 上記のサンプルコードの中に作成した `SyncApiClient` の `connectionTimeout` は `10000L`。
 
-## 3.2 カスタマイズ HttpClient の使用
+## 3.2. カスタマイズ HttpClient の使用
 
 カスタマイズ HttpClient (例えば OkHttp3) を利用したい場合、`com.alibaba.cloudapi.sdk.core.HttpClient` を継承すれば利用できます。
 
@@ -193,5 +195,135 @@ public class MyHttpClient extends HttpClient {
 }
 ```
 
-# 4.	サポート
+# 4. よくある質問
+## 4.1. 高い同時実行処理(High Concurrency)シナリオのための SDK の設定方法
+Java SDK では、開発者は要求された HTTP 接続プールの詳細を設定して、`高い同時実行性`のシナリオに対応することができます。例えば次のような一般的な構成が可能です。
+
+```java
+HttpClientBuilderParams httpsParam = new HttpClientBuilderParams();
+httpsParam.setAppKey("");
+httpsParam.setAppSecret("");
+
+// Thread pool in connection pool
+// 接続プール内のスレッドプール
+httpsParam.setExecutorService(Executors.newFixedThreadPool(100));
+// Maximum number of simultaneous connections overall
+// 全体の最大同時接続数
+httpsParam.setDispatchMaxRequests(200);
+// Maximum number of simultaneous connections per backend domain
+// バックエンドドメインごとの最大同時接続数
+httpsParam.setDispatchMaxRequestsPerHost(200);
+// Read timeout of request
+// リクエストの読み込みタイムアウト
+httpsParam.setReadTimeout(15000L);
+
+HttpsApiClientWithThreadPool.getInstance().init(httpsParam);
+```
+接続プールのスレッド数や最大同時接続数は、実際の状況に応じて設定する必要があり、大きければ大きいほど良いというわけではなく、高い同時実効処理の経験を持つエンジニアが設定する必要があります。
+
+なお、通常のクライアント呼び出しシナリオで高い同時実行性が要求されない場合は、スレッドプールや同時接続数を設定する必要はなく、デフォルトの設定で最適です。
+
+## 4.2. クライアントタイムアウトの設定
+SDK のデフォルトのタイムアウトは `10秒` ですが、個別に設定する必要がある場合は、以下のコードを参照してください。
+
+バックエンドからレスポンスが戻る前にクライアントがタイムアウトしたと思って切断してしまわないように、API 定義ではクライアントのタイムアウトをバックエンドのタイムアウトより長く設定することが重要である。
+
+```java
+HttpClientBuilderParams httpsParam = new HttpClientBuilderParams();
+httpsParam.setAppKey("");
+httpsParam.setAppSecret("");
+
+// Read timeout of request
+// リクエストの読み込みタイムアウト
+httpsParam.setReadTimeout(15000L);
+// Write timeout of request
+// リクエストの書き込みタイムアウト
+httpsParam.setWriteTimeout(15000L);
+// Timeout for connection establishment
+// 接続確立のためのタイムアウト
+httpsParam.setConnectionTimeout(15000L);
+
+HttpsApiClientWithThreadPool.getInstance().init(httpsParam);
+```
+
+## 4.3. 自動リトライの設定
+ネットワークの問題で Alibaba Cloud API Gateway へのリクエスト送信が失敗した場合、SDK が自動的に対応するリクエストを再送信する自動リトライを設定することが可能です。
+
+```java
+HttpRequestRetryHandler myRetryHandler = new HttpRequestRetryHandler() {
+
+    public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
+        if (exception == null) {
+                throw new IllegalArgumentException("Exception parameter may not be null");
+        }
+        if (context == null) {
+                throw new IllegalArgumentException("HTTP context may not be null");
+        }
+
+        /**
+         * It is recommended to do idempotent judgment, 
+         * 　　　　　non-idempotent request is not recommended to retry, 
+         * 　　　　　code omitted
+         * 偶発的な判定を推奨、非偶発的なリクエストは再試行を推奨しない、コード省略
+         */
+
+        // It is recommended to retry at most once
+        // リトライの推奨回数は最大1回
+        if (executionCount < 2) {
+                return true;
+        }
+
+        // TCP connection is broken, retry is recommended
+        // TCP 接続不良、リトライを推奨
+        if (exception instanceof NoHttpResponseException) {
+                return true;
+        }
+
+        // Connection is disconnected by the server, retry according to the situation
+        // サーバによって接続が切断、状況に応じてリトライ
+        //if (exception instanceof ConnectionResetException) {
+        //	return true;
+        //}
+
+        return false;
+    }
+};
+
+HttpClientBuilderParams httpsParam = new HttpClientBuilderParams();
+httpsParam.setAppKey("");
+httpsParam.setAppSecret("");
+httpsParam.setRequestRetryHandler(myRetryHandler);
+HttpsApiClientWithThreadPool.getInstance().init(httpsParam);
+```
+
+## 4.4. 同じクライアントオブジェクトに複数の HOST 呼び出しが必要な場合
+バックエンドの1つの HOST と通信する際、クライアントが長い接続を張るように SDK は設計されていますが、同じクライアントオブジェクトに対して複数の HOST を呼び出す必要があるシナリオでは、次のように設定することが可能です。
+
+```java
+public void invokeApi(String CaMarketExperiencePlan, byte[] body, ApiCallback callback) {
+    String path = "/rest/160601/ocr/ocr_vehicle.json";
+    ApiRequest request = new ApiRequest(HttpMethod.POST_BODY, path, body);
+    request.addParam("CaMarketExperiencePlan", CaMarketExperiencePlan, ParamPosition.HEAD, false);
+    request.setHttpConnectionMode(HttpConnectionModel.MULTIPLE_CONNECTION);
+    request.setScheme(Scheme.HTTPS);
+    request.setHost("www.aliyun.com");
+
+    sendAsyncRequest(request, callback);
+}
+```
+
+## 4.5. ContentType の設定
+SDK はデフォルトでいろんな Body に対して ContentType を追加しますが、ContentType ヘッダーを追加することで、ユーザ独自の ContentType を定義することも可能です。
+
+```java
+public void invokeApi(String CaMarketExperiencePlan, byte[] body, ApiCallback callback) {
+    String path = "/postXml";
+    ApiRequest request = new ApiRequest(HttpMethod.POST_BODY, path, body);
+    request.addHeader(HttpConstant.CLOUDAPI_HTTP_HEADER_CONTENT_TYPE, HttpConstant.CLOUDAPI_CONTENT_TYPE_XML);
+
+    sendAsyncRequest(request, callback);
+}
+```
+
+# 5. サポート
 サポートが必要な場合は、お問い合わせください。
