@@ -78,12 +78,19 @@ If Accept, Content-MD5, Content-Type, and Date are empty, add a linefeed "\n". I
 
 Content-MD5 refers to the MD5 value of Body. The MD5 value is calculated only when the Body is not Form. The calculation is as follows:
 
+```java
 String content-MD5 = Base64.encodeBase64(MD5(bodyStream.getbytes("UTF-8")));
+```
 bodyStream indicates the byte array.
 
 > ### Headers
 
-Headers refer to the string consisting of the key and value of the header with signature. It is recommended to calculate signatures for the headers starting with X-Ca and custom headers. Note that the following parameters cannot be used for headers signature calculation: X-Ca-Signature, X-Ca-Signature-Headers, Accept, Content-MD5, Content-Type, and Date.
+Headers refer to the string consisting of the key and value of the header with signature. It is recommended to calculate signatures for the headers starting with X-Ca and custom headers. 
+
+Note that the following parameters cannot be used for headers signature calculation: 
+```
+X-Ca-Signature, X-Ca-Signature-Headers, Accept, Content-MD5, Content-Type, and Date.
+```
 
 > ### Headers organization method
 
