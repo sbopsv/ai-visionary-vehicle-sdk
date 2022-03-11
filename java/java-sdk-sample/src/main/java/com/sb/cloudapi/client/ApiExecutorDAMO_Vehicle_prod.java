@@ -24,7 +24,7 @@ import com.sb.cloudapi.client.model.Parts;
 
 import com.google.gson.Gson;
 
-public class ApiExecutor {
+public class ApiExecutorDAMO_Vehicle_prod {
 
     static {
         //HTTPS Client init
