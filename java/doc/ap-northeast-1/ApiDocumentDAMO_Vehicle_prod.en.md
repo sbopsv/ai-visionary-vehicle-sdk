@@ -30,11 +30,11 @@ Public request parameters are required for each API.
 
 Parameter name | Location | Required? | Description
 -------|------|--------|----
-X-Ca-Key |Header| Yes | Appkey, ID for an API call, which can be applied for on the Alibaba Cloud [API Gateway console](https://apigateway.console.aliyun.com/#/apps/list).
+X-Ca-Key |Header| Yes | AppKey, ID for an API call, which can be applied for on the [Alibaba Cloud API Gateway console](https://apigateway.console.aliyun.com/#/apps/list).
 X-Ca-Signature | Header| Yes | Request signature string calculated using the signature calculation rule. For more information, see <a href="#Signature">Signature calculation rule</a>.
-X-Ca-Timestamp | Header| No| Time stamp in milliseconds passed by the API caller, that is, the milliseconds from January 1, 1970 till now. A time stamp is valid for 15 minutes by default.
+<span id='Timestamp'>X-Ca-Timestamp</span> | Header| No| Time stamp in milliseconds passed by the API caller, that is, the milliseconds from January 1, 1970 till now. A time stamp is valid for 15 minutes by default.
 X-Ca-Nonce|Header| No | Unique ID of an API request. An X-Ca-Nonce cannot be used repeatedly within 15 minutes. UUID is recommended. It is used together with the time stamp to prevent replay.
-Content-MD5|Header| No | When the requested Body is not a Form, the MD5 value of Body needs to be calculated and delivered to the cloud gateway for Body MD5 verification.
+<span id='md5'>Content-MD5</span> |Header| No | When the requested Body is not a Form, the MD5 value of Body needs to be calculated and delivered to the cloud gateway for Body MD5 verification.
 X-Ca-Signature-Headers|Header| No |Headers containing signatures. Different values are separated by commas (,). By default, only X-Ca-Key contains a signature. To ensure security, add signatures to X-Ca-Timestamp and X-Ca-Nonce, for example, X-X-Ca-Signature-Headers:Ca-Timestamp,X-Ca-Nonce.
 
 <br />
@@ -49,9 +49,9 @@ _________________________________________________________
 _________________________________________________________
 
 ### 4.3.1. Prepare for the AppKey
-Appkey, ID for an API call, which can be applied for on the Alibaba Cloud [API Gateway console](https://apigateway.console.aliyun.com/#/apps/list).
+AppKey, ID for an API call, which can be applied for on the [Alibaba Cloud API Gateway console](https://apigateway.console.aliyun.com/#/apps/list).
 
-### 4.3.2. Construct the stringToSign
+### 4.3.2. <span id='stringToSign'>Construct the stringToSign</span>
 
 ````java
 String stringToSign =
@@ -121,7 +121,7 @@ String url =
 
 Note that Query or Form may have multiple values. If there are multiple values, the first value is used for signature calculation.
 
-### 4.3.3. Use Secret to calculate the signature
+### 4.3.3. <span id='calSignature'>Use Secret to calculate the signature</span>
 
 ````java
 Mac hmacSha256 = Mac.getInstance("HmacSHA256");
@@ -130,7 +130,7 @@ hmacSha256.init(new SecretKeySpec(keyBytes, 0, keyBytes.length, "HmacSHA256"));
 String sign = new String(Base64.encodeBase64(Sha256.doFinal(stringToSign.getBytes("UTF-8")),"UTF-8"));
 ````
 
-Secret is the APP's key, which can be obtained from [Application management](https://apigateway.console.aliyun.com/#/apps/list).
+AppSecret is the APP's key, which can be obtained from [Application(AppKey) management](https://apigateway.console.aliyun.com/#/apps/list). Contact the API service provider.
 
 <br />
 
@@ -165,7 +165,7 @@ Secret is the APP's key, which can be obtained from [Application management](htt
             <td>body</td>
             <td>string</td>
             <td>NO, but either "URL" or "image" must be specified</td>
-            <td>Image URL stored on OSS(Alibaba Cloud Object Storage Service</td>
+            <td>Image URL stored on OSS(Alibaba Cloud Object Storage Service)</td>
         </tr>
         <tr>
             <td>image</td>
@@ -446,14 +446,14 @@ Invalid Url	|400	|The URL is invalid.	|The requested method, path, or environmen
 Invalid Domain	|400|	Invalid domain name	|The request's domain name is invalid and the API cannot be found based on the domain name. Contact the API service provider.
 Invalid HttpMethod	|400	|Invalid HTTPMethod|The method entered is incorrect.
 Invalid AppKey|400|AppKey is invalid or does not exist.	|Check the input AppKey. There is no space on either side of the parameter.
-Invalid AppSecret	|400	|App Secret is incorrect |	Check the input App Secret. There is no space on either side of the parameter.
+Invalid AppSecret	|400	|AppSecret is incorrect |	Check the input AppSecret. There is no space on either side of the parameter.
 Timestamp Expired|400| The time stamp expires.|Check whether the system time of the request is the standard time.
-Invalid Timestamp	|400|	Invalid time stamp|For more information, see the request signature instruction.
-Empty Signature	|404|Empty signature|Input the signature string. For more information, see the request signature instruction.
-Invalid Signature, Server StringToSign:%s|400|Invalid signature|The signature is invalid. For the error description, see the Invalid Signature.
-Invalid Content-MD5|400|	Invalid value of Content-MD5|The request body is empty but its MD5 value is input, or the MD5 value is incorrect. For more information, see the request signature instruction.
-Unauthorized	|403|	Unauthorized operation|	The application has no permission to call the API. For the error description, see [Unauthorized].
-Nonce Used|400|	SignatureNonce| SignatureNonce is in use.|The SignatureNonce cannot be repeatedly used.
+Invalid Timestamp	|400|	Invalid time stamp|For more information, see <a href="#Timestamp">X-Ca-Timestamp</a>.
+Empty Signature	|404|Empty signature|Input the signature string. For more information, see [<a href="#calSignature">Use Secret to calculate the signature</a>].
+Invalid Signature, Server StringToSign:%s|400|Invalid signature|The signature is invalid. For the error description, see [<a href="#stringToSign">Construct the stringToSign</a>].
+Invalid Content-MD5|400|	Invalid value of Content-MD5|The request body is empty but its MD5 value is input, or the MD5 value is incorrect. For more information, see <a href="#md5">Content-MD5</a>.
+Unauthorized	|403|	Unauthorized operation|	The application(AppKey) has no permission to call the API. Contact the API service provider.
+Nonce Used|400|	SignatureNonce is in use.|The SignatureNonce cannot be repeatedly used.
 API Not Found|	400	|The API is not found.|The input API address or HttpMethod is incorrect, or the API is offline.
 
 <br />
