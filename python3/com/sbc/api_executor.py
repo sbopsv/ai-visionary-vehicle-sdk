@@ -30,12 +30,14 @@ class ApiExecutor():
 
     ##################################################
     # Post BodyStream
-    def postStream(host, path, appKey, appSecret, file_name=None, file_url=None):
+    def postStream(host, path, appKey, appSecret, file_name=None, file_url=None, base64=None):
         cli = client.DefaultClient(app_key=appKey, app_secret=appSecret)
         req_post = request.Request(host=host, protocol=constant.HTTPS, url=path, method='POST', time_out=30000)
         bodyMap = {}
 
-        if file_name is not None :
+        if base64 is not None :
+            bodyMap['image'] = base64.decode('utf-8')
+        elif file_name is not None :
             # case1) base64 raw data
             # encode to base64
             with open(file_name, 'rb') as f1:
