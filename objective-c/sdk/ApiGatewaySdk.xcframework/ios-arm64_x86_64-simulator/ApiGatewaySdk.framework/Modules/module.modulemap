@@ -1,0 +1,6 @@
+framework module ApiGatewaySdk {
+  umbrella header "ApiGatewaySdk.h"
+
+  export *
+  module * { export * }
+}
